@@ -239,6 +239,9 @@ async function load(first){
     P = objs(a, "Jersey").filter(p => p.Player && p.Jersey !== "");
     G = objs(b, "Game #").filter(g => g.Opponent && !isNaN(num(g["Our Score"])) && g["Our Score"] !== "");
     L = objs(c, "Game #").filter(x => x.Player);
+    P.forEach(p => { const gp = num(p.GP);   /* fill Points (2×G + A) if the sheet left it blank */
+      if (isNaN(num(p.Total_PTS)) && !isNaN(num(p.Total_G)) && !isNaN(num(p.Total_A))) p.Total_PTS = String(2 * num(p.Total_G) + num(p.Total_A));
+      if (isNaN(num(p.PPG)) && gp > 0 && !isNaN(num(p.Total_PTS))) p.PPG = String(num(p.Total_PTS) / gp); });
     if (!P.length) throw new Error("empty");
     $("stamp").textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"}) + ". Stats refresh automatically.";
     route();
@@ -250,12 +253,15 @@ async function load(first){
 /* ---- helpers for stats ---- */
 const pool = () => P.filter(p => num(p.GP) > 0);
 function rankOf(s, p){
-  const mine = num(p[s[2]]); if (isNaN(mine)) return null;
-  const pl = pool().filter(x => !isNaN(num(x[s[2]])));
-  return { r: pl.filter(x => s[4] ? num(x[s[2]]) < mine : num(x[s[2]]) > mine).length + 1, of: pl.length };
+  /* ranks follow the Per game / Season totals switch (percentages use the same column in both modes) */
+  const c = colOf(s), mine = num(p[c]); if (isNaN(mine)) return null;
+  const pl = pool().filter(x => !isNaN(num(x[c])));
+  const better = pl.filter(x => s[4] ? num(x[c]) < mine : num(x[c]) > mine).length;
+  const tied = pl.filter(x => num(x[c]) === mine).length - 1;
+  return { r: better + 1, of: pl.length, t: tied > 0 };
 }
 function bestOf(s){
-  const v = pool().map(x => num(x[s[2]])).filter(x => !isNaN(x));
+  const v = pool().map(x => num(x[colOf(s)])).filter(x => !isNaN(x));
   return v.length ? (s[4] ? Math.min(...v) : Math.max(...v)) : NaN;
 }
 const sum = k => P.reduce((t, p) => t + (num(p[k]) || 0), 0);
@@ -296,6 +302,7 @@ function vPlayers(){
 const SPORT = "Soccer";
 const LTABS = [["Attack",["G","A","PTS","G+A","SH","SOT","SH%","SOT%"]],["Goalkeeping",["SAV","GA","SV%","CS"]],["Defense",["TKL","FC","YC","RC"]],["Other",["MIN","CK","OFF"]]];     /* [tab name, [stat codes shown as columns]] */
 const GROUPS = [["Attack",["G","A","PTS","G+A","SH","SOT","SH%","SOT%"]],["Goalkeeping",["SAV","GA","SV%","CS"]],["Defense & discipline",["TKL","FC","YC","RC"]],["Other",["MIN","CK","OFF"]]];   /* [group name, [stat codes]] for the profile stat line */
+const GRANK = {"Attack":"G+A","Goalkeeping":"SAV","Defense & discipline":"TKL","Other":"MIN"};   /* stat each category's RANK pill is based on */
 const GLOG = [["MIN","MIN"],["G","G"],["A","A"],["PTS","PTS"],["SH","SH"],["SOT","SOT"],["SAV","SAV"],["GA","GA"],["TKL","TKL"],["CK","CK"],["OFF","OFF"],["FC","FC"],["YC","YC"],["RC","RC"]];       /* [label, column or [made, attempted]] shown in each game-log row */
 let ldT = 0, ldK = null, ldD = -1;
 const precord = p => { const gp = num(p.GP), t = Math.max(0, gp - (num(p.W) || 0) - (num(p.L) || 0)); return `${p.W}–${p.L}–${t}`; };
@@ -343,12 +350,12 @@ function vProfile(){
 
   const groups = GROUPS.map(([lab, codes]) => ({lab, ss: codes.map(stat)})).filter((g, i) => i === 0 || g.ss.some(s => num(p[s[2]]) > 0));
   const statLine = groups.map(g => {
-    const lead = g.ss[0], r = rankOf(lead, p);
-    return `<div class="gh"><b>${esc(g.lab)}</b><span class="pl" title="Rank in ${esc(lead[1])} among teammates">RANK ${r ? r.r : "–"}</span><span class="pl">GP ${gp}</span></div><div class="sg">` +
+    const lead = (typeof GRANK !== "undefined" && GRANK[g.lab]) ? stat(GRANK[g.lab]) : g.ss[0], r = rankOf(lead, p), lv = num(p[colOf(lead)]);
+    return `<div class="gh"><b>${esc(g.lab)}</b><span class="pl" title="Rank in ${esc(lead[1])} among teammates">RANK ${r && lv > 0 ? (r.t ? "T-" : "") + r.r : "–"}</span><span class="pl">GP ${gp}</span></div><div class="sg">` +
       g.ss.map(s => {
         const r2 = rankOf(s, p), v = num(p[s[2]]);
         const shown = (isPct(s) && mode === "tot") ? esc(seasonOf(s, p)) : fmt(s, p);
-        return `<div class="sr"><span class="sl">${esc(s[1])}</span><span class="sv">${r2 && v > 0 ? `<em>${ord(r2.r)}</em>` : ""}${shown}</span></div>`;
+        return `<div class="sr"><span class="sl">${esc(s[1])}</span><span class="sv">${r2 && v > 0 ? `<em>${r2.t ? "T-" : ""}${ord(r2.r)}</em>` : ""}${shown}</span></div>`;
       }).join("") + `</div>`;
   }).join("");
 
