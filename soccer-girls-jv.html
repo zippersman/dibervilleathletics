@@ -389,7 +389,7 @@ function vBox(){
 function route(){
   if (!P.length) return;
   let h = location.hash.slice(1) || "overview", tab = h, m;
-  if ((m = h.match(/^p(\d+)$/))){ tab = "profile"; profJ = m[1]; }
+  if (!TABS.some(t => t[0] === h) && (m = h.match(/^p([A-Za-z0-9_-]+)$/))){ tab = "profile"; profJ = m[1]; }
   else if ((m = h.match(/^g(\d+)$/))){ tab = "box"; boxN = m[1]; }
   if (!TABS.some(t => t[0] === tab)) tab = "overview";
   $("nav").innerHTML = TABS.map(t => `<button data-go="${t[0]}" class="${t[0] === tab ? "on" : ""}">${t[1]}</button>`).join("");

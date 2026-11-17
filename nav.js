@@ -25,7 +25,7 @@
 
   function tabNow(){
     var h = location.hash.slice(1) || "overview";
-    if (/^p\d+$/.test(h)) return "profile";
+    if (!TABS.some(function(t){ return t[0] === h; }) && /^p[A-Za-z0-9_-]+$/.test(h)) return "profile";
     if (/^g\d+$/.test(h)) return "box";
     return TABS.some(function(t){ return t[0] === h; }) ? h : "overview";
   }
