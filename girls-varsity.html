@@ -234,7 +234,10 @@ select{box-shadow:0 0 16px rgba(249,167,31,.3)}
 .lr .avs{flex:none;width:26px;height:26px;border-radius:50%;background:#2a2e35;border:1px solid rgba(249,167,31,.4);color:var(--gold);display:grid;place-items:center;font:800 10px "Barlow Condensed",sans-serif}
 .lr .ltn b{font-size:13px}
 .lr em{margin-left:auto;font-style:normal;font-weight:700;font-size:13px}
-.own{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;color:var(--gold,#e8b923);font:700 20px/1 "Barlow Condensed",sans-serif;margin-bottom:6px}.own img{object-fit:contain}.own img{position:relative;z-index:1;width:40px;height:40px;margin:0}</style>
+.own{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;color:var(--gold,#e8b923);font:700 20px/1 "Barlow Condensed",sans-serif;margin-bottom:6px}.own img{object-fit:contain}.own img{position:relative;z-index:1;width:40px;height:40px;margin:0}.rtab th{text-align:left;min-width:150px}.rtab th:first-child{min-width:140px}.rtab td.rv{text-align:left;white-space:normal;vertical-align:top;min-width:150px}
+.rvv{font:800 30px/1 "Barlow Condensed",sans-serif;color:var(--gold)}.rvv small{font-size:14px;margin-left:2px;color:var(--mute)}
+.rvn{font-weight:600;margin-top:3px}.rvc{color:var(--mute);font-size:12.5px;margin-top:1px}.rvs{font-weight:600}.lowb{font-size:11px;color:var(--mute);font-weight:600;margin-left:4px}
+</style>
 <link rel="stylesheet" href="nav.css">
 <script src="logos.js"></script>
 <script src="nav.js" defer></script>
@@ -256,7 +259,7 @@ const TEAM = "D’Iberville";
 const SEASON = "Girls Varsity · Season 2026–2027";
 /* ===================== */
 const GID = {looker:127058417, sched:1598752444, log:1696552548};
-const TABS = [["overview","Overview"],["schedule","Schedule"],["players","Players"],["leaders","Leaders"],["profile","Profile"],["box","Box score"]];
+const TABS = [["overview","Overview"],["schedule","Schedule"],["players","Players"],["leaders","Leaders"],["records","Stat Record"],["profile","Profile"],["box","Box score"]];
 const STATS = [
  ["MIN","Minutes","MPG","Total_MIN"],["PTS","Points","PPG","Total_PTS"],["FGM","FG made","FGM_PG","Total_FGM"],["FGA","FG attempted","FGA_PG","Total_FGA"],
  ["FG%","FG percent","FG_PCT",["Total_FGM","Total_FGA"]],["3PM","3PT made","3PM_PG","Total_3PM"],["3PA","3PT attempted","3PA_PG","Total_3PA"],
@@ -523,6 +526,66 @@ function vBox(){
   <div class="scroll" style="margin-top:12px"><table><thead><tr><th class="l">#</th><th class="l">Player</th><th>MIN</th><th>PTS</th><th>FG</th><th>3PT</th><th>FT</th><th>REB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>PF</th></tr></thead><tbody>${rows.map(r => line(r, 0)).join("")}${line(null, 1)}</tbody></table></div>`;
 }
 
+/* ---- stat records ---- */
+/* Optional history from earlier seasons. Fill these in and the Single Season / All-Time (and older single-game / single-month) records pick them up.
+   HIST: one row per player per past season, e.g. {season:"2025–26", player:"Name", GP:22, MIN:600, PTS:310, REB:120, AST:80, ...} (season totals, same stat codes as the table)
+   HISTBEST: older single-game / single-month records, e.g. {scope:"game", stat:"PTS", value:41, who:"Name", when:"Jan 9, 2024"} */
+const HIST = [];
+const HISTBEST = [];
+function vRecords(){
+  const soc = SPORT === "Soccer", MINQ = soc ? 45 : 20, MING = {game:1, month:2, season:5, career:8};
+  const R = soc
+    ? [["G","Goals","G","Total_G"],["A","Assists","A","Total_A"],["G+A","Goal contributions",["G","A"],"Total_GCON"],["SH","Shots","SH","Total_SH"],["SOT","Shots on target","SOT","Total_SOT"],["SAV","Saves","SAV","Total_SAV"],["TKL","Tackles","TKL","Total_TKL"],["CK","Corners","CK","Total_CK"],["GA","Goals against (keepers)","GA","Total_GA",1]]
+    : [["PTS","Points","PTS","Total_PTS"],["REB","Rebounds","REB","Total_REB"],["OREB","Off. rebounds","OREB","Total_OREB"],["DREB","Def. rebounds","DREB","Total_DREB"],["AST","Assists","AST","Total_AST"],["STL","Steals","STL","Total_STL"],["BLK","Blocks","BLK","Total_BLK"],["FGM","FG made","FGM","Total_FGM"],["3PM","3PT made","3PM","Total_3PM"],["FTM","FT made","FTM","Total_FTM"],["TOV","Turnovers","TOV","Total_TOV",1],["PF","Fouls","PF","Total_PF",1]];
+  const lcols = L.length ? Object.keys(L[0]) : [], pcols = P.length ? Object.keys(P[0]) : [];
+  const defs = R.filter(d => [].concat(d[2]).every(c => lcols.includes(c)) && pcols.includes(d[3]));
+  const lv = (r, d) => [].concat(d[2]).reduce((t, c) => t + (num(r[c]) || 0), 0);
+  const gm = {}; G.forEach(g => { const q = String(g.Date).split("/"), dt = new Date(+q[2], q[0] - 1, +q[1]); gm[g["Game #"]] = {g, dt: isNaN(dt) ? null : dt}; });
+  const mlab = dt => dt ? dt.toLocaleDateString("en-US", {month:"short", year:"numeric"}) : "?";
+  const mk = (who, gp, min, v, ctx) => ({who, gp, min, v, ctx});
+  const games = [], months = {}, seasons = [], careers = {};
+  L.forEach(r => {
+    const info = gm[r["Game #"]]; if (!info) return;
+    const v = {}; defs.forEach(d => v[d[0]] = lv(r, d));
+    const min = num(r.MIN) || 0;
+    games.push(mk(r.Player, 1, min, v, `${info.g["Home / Away"] === "Away" ? "@" : "vs"} ${info.g.Opponent} · ${gdate(info.g.Date)}`));
+    const k = r.Player + "|" + mlab(info.dt), m = months[k] || (months[k] = mk(r.Player, 0, 0, Object.fromEntries(defs.map(d => [d[0], 0])), mlab(info.dt)));
+    m.gp++; m.min += min; defs.forEach(d => m.v[d[0]] += v[d[0]]);
+  });
+  const addCareer = e => { const k = String(e.who).toLowerCase(), c = careers[k] || (careers[k] = mk(e.who, 0, 0, Object.fromEntries(defs.map(d => [d[0], 0])), "")); c.gp += e.gp; c.min += e.min; defs.forEach(d => c.v[d[0]] += e.v[d[0]] || 0); c.known = (c.known !== false) && e.min > 0; };
+  pool().forEach(p => { const v = {}; defs.forEach(d => v[d[0]] = num(p[d[3]]) || 0); const e = mk(p.Player, num(p.GP) || 0, num(p.Total_MIN) || 0, v, "This season"); seasons.push(e); addCareer(e); });
+  HIST.forEach(h => { const v = {}; defs.forEach(d => v[d[0]] = num(h[d[0]]) || 0); const e = mk(h.player, num(h.GP) || 0, num(h.MIN) || 0, v, h.season || ""); seasons.push(e); addCareer(e); });
+  const best = (entries, d, scope) => {
+    const lo = !!d[4], out = {val: NaN, who: []};
+    entries.forEach(e => {
+      let x = e.v[d[0]];
+      if (lo){
+        if (e.gp < MING[scope] || (e.min > 0 && e.min / e.gp < MINQ) || (soc && !(e.v.SAV > 0))) return;
+        if (scope !== "game") x = x / e.gp;
+        x = Math.round(x * 10) / 10;
+      } else if (!(x > 0)) return;
+      if (isNaN(out.val) || (lo ? x < out.val : x > out.val)){ out.val = x; out.who = [e]; }
+      else if (x === out.val) out.who.push(e);
+    });
+    if (scope === "game" || scope === "month") HISTBEST.filter(h => h.scope === scope && h.stat === d[0] && !isNaN(num(h.value))).forEach(h => {
+      const x = num(h.value), e = {who: h.who, ctx: h.when || ""};
+      if (isNaN(out.val) || (lo ? x < out.val : x > out.val)){ out.val = x; out.who = [e]; } else if (x === out.val) out.who.push(e);
+    });
+    return out;
+  };
+  const cell = (o, d, scope) => {
+    if (!o || isNaN(o.val)) return `<td class="rv"><span class="mute">–</span></td>`;
+    const rate = d[4] && scope !== "game", names = [...new Set(o.who.map(e => e.who))];
+    const nm = names.length > 2 ? `${esc(names.slice(0, 2).join(", "))} +${names.length - 2} more` : esc(names.join(", "));
+    const ctx = o.who.length === 1 ? o.who[0].ctx : "";
+    return `<td class="rv"><div class="rvv">${rate ? o.val.toFixed(1) : o.val}${rate ? '<small>/g</small>' : ""}</div><div class="rvn">${nm}</div>${ctx ? `<div class="rvc">${esc(ctx)}</div>` : ""}</td>`;
+  };
+  const rows = defs.map(d => `<tr><td class="l rvs">${esc(d[1])}${d[4] ? ' <span class="lowb" title="Lower is better">▼ lowest</span>' : ""}</td>${cell(best(games, d, "game"), d, "game")}${cell(best(Object.values(months), d, "month"), d, "month")}${cell(best(seasons, d, "season"), d, "season")}${cell(best(Object.values(careers), d, "career"), d, "career")}</tr>`).join("");
+  return `<h1>Stat record</h1><p class="note" style="margin-bottom:14px">Best ever for each stat. ${soc ? "Highest" : "Highest"} is best for most stats; for stats where less is better the record is the lowest, shown per game for month, season and all-time, and only for players who played real minutes${soc ? " (goalkeepers for goals against)" : ""}.</p>
+  <div class="scroll"><table class="rtab"><thead><tr><th class="l">Stat</th><th>Single game</th><th>Single month</th><th>Single season</th><th>All-time</th></tr></thead><tbody>${rows || `<tr><td class="l" colspan="5">No data yet.</td></tr>`}</tbody></table></div>
+  <p class="note" style="margin-top:12px">Single game and single month come from this season’s game log. Single season and all-time include this season’s totals${HIST.length || HISTBEST.length ? " plus saved history" : "; add past seasons to HIST in this file to extend them"}.</p>`;
+}
+
 /* ---- routing ---- */
 function route(){
   if (!P.length) return;
@@ -531,7 +594,7 @@ function route(){
   else if ((m = h.match(/^g(\d+)$/))){ tab = "box"; boxN = m[1]; }
   if (!TABS.some(t => t[0] === tab)) tab = "overview";
   $("nav").innerHTML = TABS.map(t => `<button data-go="${t[0]}" class="${t[0] === tab ? "on" : ""}">${t[1]}</button>`).join("");
-  const v = {overview:vOverview, schedule:vSchedule, players:vPlayers, leaders:vLeaders, profile:vProfile, box:vBox}[tab];
+  const v = {overview:vOverview, schedule:vSchedule, players:vPlayers, leaders:vLeaders, records:vRecords, profile:vProfile, box:vBox}[tab];
   $("main").className = "wrap" + (tab === "overview" ? " ovw" : "");
   $("main").innerHTML = v();
 }
