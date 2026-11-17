@@ -361,7 +361,7 @@ function vProfile(){
   }).join("") : `<div class="msg" style="margin-top:0">No game-by-game stats yet.</div>`;
 
   return `<div class="panel">${top}
-  <div class="pcard"><img class="pav" src="icon-192-v2.png" alt=""><div><h2 class="pname">${esc(p.Player)}</h2><div class="pm"><b>${esc(TEAM)}</b> · #${esc(p.Jersey)} · ${esc(SEASON.split(" · ")[1] || "")} · ${groups.length} categor${groups.length === 1 ? "y" : "ies"} · team record ${esc(precord(p))}</div></div>
+  <div class="pcard"><img class="pav" src="icons/soccer-girls-varsity.png" alt=""><div><h2 class="pname">${esc(p.Player)}</h2><div class="pm"><b>${esc(TEAM)}</b> · #${esc(p.Jersey)} · ${esc(SEASON.split(" · ")[1] || "")} · ${groups.length} categor${groups.length === 1 ? "y" : "ies"} · team record ${esc(precord(p))}</div></div>
     <div class="pp"><button data-scroll="statline">Stat line</button><button data-scroll="gamelog">Game log</button></div></div>
   <div class="cols">
     <section class="sp" id="statline"><div class="st"><b>Season stat line</b><span>${groups.length} CATEGOR${groups.length === 1 ? "Y" : "IES"}</span></div>${statLine}

@@ -117,7 +117,7 @@ a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><img src="icon-192-v2.png" alt="D’Iberville Warriors logo"><div><b>D’IBERVILLE BASKETBALL</b><span>Season 2026–2027</span></div><a class="back" href="index.html">← Main menu</a></div>
+  <div class="top"><img src="icons/basketball.png" alt="D’Iberville Warriors logo"><div><b>D’IBERVILLE BASKETBALL</b><span>Season 2026–2027</span></div><a class="back" href="index.html">← Main menu</a></div>
   <div class="wip" role="status"><div>WORK IN PROGRESS · MORE TEAMS COMING SOON</div></div>
 
   <div class="eyebrow">4 TEAMS</div>
@@ -126,19 +126,19 @@ a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
 
   <div class="cards" style="margin-top:20px">
     <a class="card" href="girls-varsity.html" style="--c:#f9a71f">
-      <div class="h"><img src="icon-192-v2.png" alt=""><div><h3>Girls Varsity</h3><p>D’Iberville Girls Basketball</p></div></div>
+      <div class="h"><img src="icons/girls-varsity.png" alt=""><div><h3>Girls Varsity</h3><p>D’Iberville Girls Basketball</p></div></div>
       <div class="f"><span class="open" style="color:#f9a71f">Open team <i class="ar">→</i></span><span class="pill">Record <b id="rec-v">–</b></span></div>
     </a>
     <a class="card" href="girls-jv.html" style="--c:#f9a71f">
-      <div class="h"><img src="icon-192-v2.png" alt=""><div><h3>Girls JV</h3><p>D’Iberville Girls Junior Varsity</p></div></div>
+      <div class="h"><img src="icons/girls-jv.png" alt=""><div><h3>Girls JV</h3><p>D’Iberville Girls Junior Varsity</p></div></div>
       <div class="f"><span class="open" style="color:#f9a71f">Open team <i class="ar">→</i></span><span class="pill">Record <b id="rec-jv">–</b></span></div>
     </a>
     <a class="card" href="boys-varsity.html" style="--c:#f9a71f">
-      <div class="h"><img src="icon-192-v2.png" alt=""><div><h3>Boys Varsity</h3><p>D’Iberville Boys Basketball</p></div></div>
+      <div class="h"><img src="icons/boys-varsity.png" alt=""><div><h3>Boys Varsity</h3><p>D’Iberville Boys Basketball</p></div></div>
       <div class="f"><span class="open" style="color:#f9a71f">Open team <i class="ar">→</i></span><span class="pill">Record <b id="rec-bv">–</b></span></div>
     </a>
     <a class="card" href="boys-jv.html" style="--c:#f9a71f">
-      <div class="h"><img src="icon-192-v2.png" alt=""><div><h3>Boys JV</h3><p>D’Iberville Boys Junior Varsity</p></div></div>
+      <div class="h"><img src="icons/boys-jv.png" alt=""><div><h3>Boys JV</h3><p>D’Iberville Boys Junior Varsity</p></div></div>
       <div class="f"><span class="open" style="color:#f9a71f">Open team <i class="ar">→</i></span><span class="pill">Record <b id="rec-bjv">–</b></span></div>
     </a>
   </div>
@@ -233,9 +233,9 @@ async function load(first){
   $("res").innerHTML = items.map(({t, g, pog}) => {
     const win = g.Result === "W";
     return `<a class="r" href="${t.page}#g${esc(g["Game #"])}">
-      <div class="m"><span><img class="tl" src="icon-192-v2.png" alt=""><b>${t.name}</b> · ${esc(dateStr(g.Date))}</span><span class="fin">FINAL</span></div>
+      <div class="m"><span><img class="tl" src="icons/${t.page.replace('.html','.png')}" alt=""><b>${t.name}</b> · ${esc(dateStr(g.Date))}</span><span class="fin">FINAL</span></div>
       <div class="vs">
-        <div class="t ${win ? "w" : "l"}"><img src="icon-192-v2.png" alt=""><div class="n">D’Iberville</div><div class="s">${esc(g["Our Score"])}</div></div>
+        <div class="t ${win ? "w" : "l"}"><img src="icons/${t.page.replace('.html','.png')}" alt=""><div class="n">D’Iberville</div><div class="s">${esc(g["Our Score"])}</div></div>
         <div class="dash">–</div>
         <div class="t ${win ? "l" : "w"}">${oppLogo(g.Opponent)}<div class="n">${esc(g.Opponent)}</div><div class="s">${esc(g["Opp Score"])}</div></div>
       </div>
