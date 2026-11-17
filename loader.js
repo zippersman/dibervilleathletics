@@ -162,7 +162,7 @@
     ["Love is the best teacher.", "Pliny the Younger"],
 
       /* Coach Nick */
-    ["If everyone fought fire with fire, the whole world would burn", "Coach Nick"],
+    ["If everyone fought fire with fire, the whole world would burn.", "Coach Nick"],
     ["Victim Mentality Bullcrap!", "Coach Nick"],
 
     /* Anonymous */
