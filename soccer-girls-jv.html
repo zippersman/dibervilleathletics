@@ -208,7 +208,7 @@ select{box-shadow:0 0 16px rgba(249,167,31,.3)}
 .lr .avs{flex:none;width:26px;height:26px;border-radius:50%;background:#2a2e35;border:1px solid rgba(249,167,31,.4);color:var(--gold);display:grid;place-items:center;font:800 10px "Barlow Condensed",sans-serif}
 .lr .ltn b{font-size:13px}
 .lr em{margin-left:auto;font-style:normal;font-weight:700;font-size:13px}
-</style>
+.own{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:#1d2a4a;border:2px solid var(--gold,#e8b923);color:var(--gold,#e8b923);font:700 20px/1 "Barlow Condensed",sans-serif;margin-bottom:6px}.own::before{content:"D";position:absolute}.own img{position:relative;z-index:1;width:40px;height:40px;border-radius:50%;background:#1d2a4a;margin:0}</style>
 <link rel="stylesheet" href="nav.css">
 <script src="logos.js"></script>
 <script src="nav.js" defer></script>
@@ -356,7 +356,7 @@ function vOverview(){
     const p = potg(g), r = g.Result, cls = r === "W" ? "win" : r === "L" ? "loss" : "tie";
     return `<div class="rcd2" data-go="g${esc(g["Game #"])}">
       <div class="rch"><span class="rcs">GAME ${esc(g["Game #"])} · ${g["Home / Away"] === "Away" ? "AWAY" : "HOME"}</span><span class="rcdt">${esc(gdate(g.Date))}</span><span class="rcf ${cls}">FINAL${r === "W" ? " · W" : r === "L" ? " · L" : r === "T" ? " · T" : ""}</span></div>
-      <div class="rct"><div class="tm">${lg(TEAM, 40)}<span class="tn">${esc(TEAM)}</span><span class="sc">${esc(g["Our Score"])}</span></div><span class="dash">-</span><div class="tm">${lg(g.Opponent, 40)}<span class="tn">${esc(g.Opponent)}</span><span class="sc">${esc(g["Opp Score"])}</span></div></div>
+      <div class="rct"><div class="tm"><span class="own">${lg("D'Iberville", 40)}</span><span class="tn">${esc(TEAM)}</span><span class="sc">${esc(g["Our Score"])}</span></div><span class="dash">-</span><div class="tm">${lg(g.Opponent, 40)}<span class="tn">${esc(g.Opponent)}</span><span class="sc">${esc(g["Opp Score"])}</span></div></div>
       <div class="rcp"><span class="pl2">PLAYER OF THE GAME</span>${p ? `<span class="pv"><b>${esc(p.name)}</b> ${esc(p.line)}</span>` : `<span class="pv">–</span>`}</div></div>`;
   };
   const recent = G.slice(-8).reverse().map(card).join("") || `<div class="msg" style="margin:0">No games yet.</div>`;
