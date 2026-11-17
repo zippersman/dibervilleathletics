@@ -157,6 +157,7 @@ const PUB_JV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ44GizEl-QSqMxk
 const PUB_BV  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpDXdB018lquHSr0fnhvg9S8P114LzLHDSDJHOcIZurwnKG_6W8zqaQJn2JniBDTOKt_pseFpCH5A1/pubhtml"; // same link you paste into boys-varsity.html
 const PUB_BJV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQiF8TSkPAyRmv-hcX2HC8w8_jq39xUOc5-YJDlqsvDRUBf8svrZ7vD0_9lgypMF4vpFHbLPhDTKrMc/pubhtml"; // same link you paste into boys-jv.html
 /* ===================== */
+const PER_TEAM = 3; // most recent games shown for each team
 const GID = {sched:1598752444, log:1696552548};
 const TEAMS = [
   {name:"GIRLS VARSITY", page:"girls-varsity.html", pub:PUB_V,  rec:"rec-v",  gid:GID},
@@ -224,7 +225,7 @@ async function load(first){
     return;
   }
   const out = await Promise.all(TEAMS.map(t => loadTeam(t).catch(() => null)));
-  const items = out.filter(Boolean).flat().sort((x, y) => y.k - x.k).slice(0, 6);
+  const items = out.filter(Boolean).flatMap(a => a.slice().sort((x, y) => y.k - x.k).slice(0, PER_TEAM)).sort((x, y) => y.k - x.k);
   if (!items.length){
     if (first) $("res").innerHTML = `<div class="msg">Couldn’t load results right now. Please try again in a few minutes.</div>`;
     return;
