@@ -163,7 +163,7 @@
 
       /* Coach Nick */
     ["If everyone fought fire with fire, the whole world would burn", "Coach Nick"],
-    ["Victim Mentality Bull Crap!", "Coach Nick"],
+    ["Victim Mentality Bullcrap!", "Coach Nick"],
 
     /* Anonymous */
     ["There's some easter egg quotes. Catch em' all!", "Anonymous"]
