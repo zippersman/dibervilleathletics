@@ -93,6 +93,10 @@ a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
 .ts .pg{display:flex;flex-direction:column;align-items:flex-end;gap:1px;text-align:right}
 .ts .pg b{font:600 15px Barlow,sans-serif;color:var(--ink)}
 .ts .pg i{font:600 13px Barlow,sans-serif;font-style:normal;color:var(--gold);letter-spacing:.02em}
+
+/* fill the whole screen and don't tile the glow, which caused a cut-off strip at the bottom of short pages */
+html{background:#0e0f12}
+body{min-height:100vh;background-repeat:no-repeat}
 </style>
 <link rel="stylesheet" href="nav.css">
 <script src="logos.js"></script>

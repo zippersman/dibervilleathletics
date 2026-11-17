@@ -114,12 +114,59 @@
     ["Let not the sun go down upon your wrath.", "Ephesians 4:26"],
     ["I have fought a good fight, I have finished my course, I have kept the faith.", "2 Timothy 4:7"],
     ["Faith is the substance of things hoped for, the evidence of things not seen.", "Hebrews 11:1"],
-    ["Let us run with patience the race that is set before us.", "Hebrews 12:1"]
+    ["Let us run with patience the race that is set before us.", "Hebrews 12:1"],
+
+    /* Classroom of the Elite: episode opening quotes, seasons 1-3 */
+    /* Season 1 */
+    ["What is evil? Whatever springs from weakness.", "Friedrich Nietzsche"],
+    ["It takes a great talent and skill to conceal one's talent and skill.", LR],
+    ["Man is an animal that makes bargains: no other animal does this. No dog exchanges bones with another.", "Adam Smith"],
+    ["We should not be upset that others hide the truth from us when we hide it from ourselves.", LR],
+    ["Hell is other people.", "Jean-Paul Sartre"],
+    ["There are two kinds of lies; one concerns an accomplished fact, the other concerns a future duty.", "Jean-Jacques Rousseau"],
+    ["Nothing is as dangerous as an ignorant friend; a wise enemy is to be preferred.", "Jean de La Fontaine"],
+    ["Abandon all hope, ye who enter here.", "Dante Alighieri"],
+    ["Man is condemned to be free.", "Jean-Paul Sartre"],
+    ["Every man has in himself the most dangerous traitor of all.", "Søren Kierkegaard"],
+    ["What people commonly call fate is mostly their own stupidity.", "Arthur Schopenhauer"],
+    ["Genius lives only one story above madness.", "Arthur Schopenhauer"],
+
+    /* Season 2 */
+    ["Remember to keep a clear head in difficult times.", "Horace"],
+    ["There are two main human sins from which all the others derive: impatience and indolence.", "Franz Kafka"],
+    ["The greatest souls are capable of the greatest vices as well as of the greatest virtues.", "René Descartes"],
+    ["The material has to be created.", "Florence Nightingale"],
+    ["Every failure is a step to success.", "William Whewell"],
+    ["Adversity is the first path to truth.", "Lord Byron"],
+    ["To doubt everything or to believe everything are two equally convenient solutions; both dispense with the necessity of reflection.", "Henri Poincaré"],
+    ["The wound is at her heart.", "Virgil"],
+    ["If you make a mistake and do not correct it, this is called a mistake.", "Confucius"],
+    ["People, often deceived by an illusive good, desire their own ruin.", "Niccolò Machiavelli"],
+    ["A man who cannot command himself will always be a slave.", "Johann Wolfgang von Goethe"],
+    ["Force without wisdom falls of its own weight.", "Horace"],
+    ["The worst enemy you can meet will always be yourself.", "Friedrich Nietzsche"],
+
+    /* Season 3 */
+    ["The strongest principle of growth lies in the human choice.", "George Eliot"],
+    ["Man is wolf to man.", "Plautus"],
+    ["We never forget what we endeavor to forget.", "Friedrich Nietzsche"],
+    ["To work you have the right, but not to the fruits thereof.", "Bhagavad Gita"],
+    ["Fortune favors the bold.", "Virgil"],
+    ["It is better to receive an injury than to inflict one.", "Cicero"],
+    ["People will do anything, no matter how absurd, in order to avoid facing their own souls.", "Carl Jung"],
+    ["Those who cannot remember the past are condemned to repeat it.", "George Santayana"],
+    ["Extreme justice is extreme injustice.", "Cicero"],
+    ["The first cause of absurd conclusions I ascribe to the want of method.", "Thomas Hobbes"],
+    ["There is only one rule in love: bring happiness to those you love.", "Stendhal"],
+    ["Change your desires rather than the order of the world.", "René Descartes"],
+    ["Love is the best teacher.", "Pliny the Younger"],
 
       /* Coach Nick */
     ["If everyone fought fire with fire, the whole world would burn", "Coach Nick"],
+    ["Victim Mentality Bull Crap!", "Coach Nick"],
 
-    
+    /* Anonymous */
+    ["There's some easter egg quotes. Catch em' all!", "Anonymous"]
   ];
 
   var el = document.createElement("div");

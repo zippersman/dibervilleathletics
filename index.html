@@ -103,6 +103,10 @@ a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
 .guide li svg{display:inline-block;vertical-align:-4px;width:18px;height:18px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin:0 2px}
 .guide .tip{margin:14px 0 0;padding-top:10px;border-top:1px solid var(--line);color:var(--mute);font-size:13px;line-height:1.4}
 .done{margin-top:14px;color:var(--mute);font-size:14px}
+
+/* fill the whole screen and don't tile the glow, which caused a cut-off strip at the bottom of short pages */
+html{background:#0e0f12}
+body{min-height:100vh;background-repeat:no-repeat}
 </style>
 <link rel="stylesheet" href="nav.css">
 <script>

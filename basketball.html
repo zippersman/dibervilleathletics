@@ -108,6 +108,10 @@ a.card:hover h3{text-shadow:0 0 18px rgba(249,167,31,.65)}
 a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
 @media (hover:none){a.card::before{opacity:1;animation:shine 5.5s ease-in-out 1.2s infinite}}
 @media (prefers-reduced-motion:reduce){a.card,a.card:not(:hover),.card::before,a.r::before{animation:none!important}.card,a.r,.ar{transition:none}}
+
+/* fill the whole screen and don't tile the glow, which caused a cut-off strip at the bottom of short pages */
+html{background:#0e0f12}
+body{min-height:100vh;background-repeat:no-repeat}
 </style>
 <link rel="stylesheet" href="nav.css">
 <script src="logos.js"></script>
