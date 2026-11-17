@@ -110,6 +110,7 @@ a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
 @media (prefers-reduced-motion:reduce){a.card,a.card:not(:hover),.card::before,a.r::before{animation:none!important}.card,a.r,.ar{transition:none}}
 </style>
 <link rel="stylesheet" href="nav.css">
+<script src="logos.js"></script>
 <script src="nav.js" defer></script>
 <link rel="stylesheet" href="loader.css">
 <script src="loader.js" defer></script>
@@ -197,7 +198,7 @@ const gameScore = p => { const n = k => num(p[k]) || 0; return n("PTS") + .4*n("
 // shows a stat only when the player has at least 3 of it
 const pogLine = p => [["PTS","PTS"],["AST","AST"],["REB","REB"],["STL","STL"],["BLK","BLK"]].filter(([k]) => num(p[k]) >= 3).map(([k,l]) => `${num(p[k])} ${l}`).join(" · ");
 const slug = n => String(n).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-const oppLogo = n => { const i = initials(n); return `<img class="op" src="logos/${slug(n)}.png" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ini',textContent:'${i}'}))">`; };
+const oppLogo = n => dhsLogo(n, {cls:"op", fb:"ini"});
 const initials = n => n.replace(/[^A-Za-z ]/g, "").split(" ").filter(Boolean).map(w => w[0]).join("").slice(0, 2).toUpperCase();
 
 const unset = p => !p || p.startsWith("PASTE_");

@@ -95,6 +95,7 @@ a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
 .ts .pg i{font:600 13px Barlow,sans-serif;font-style:normal;color:var(--gold);letter-spacing:.02em}
 </style>
 <link rel="stylesheet" href="nav.css">
+<script src="logos.js"></script>
 <script src="nav.js" defer></script>
 <link rel="stylesheet" href="loader.css">
 <script src="loader.js" defer></script>
@@ -182,7 +183,7 @@ const gameScore = p => { const n = k => num(p[k]) || 0; return 3*n("G") + 2*n("A
 const pogLine = p => [["G","G"],["A","A"],["SAV","SAV"],["TKL","TKL"]].filter(([k]) => num(p[k]) >= 1).map(([k,l]) => `${num(p[k])} ${l}`).join(" · ") + (num(p.CS) >= 1 ? " · CS" : "");
 const slug = n => String(n).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 const initials = n => n.replace(/[^A-Za-z ]/g, "").split(" ").filter(Boolean).map(w => w[0]).join("").slice(0, 2).toUpperCase();
-const oppLogo = n => { const i = initials(n); return `<img class="op" src="logos/${slug(n)}.png" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ini',textContent:'${i}'}))">`; };
+const oppLogo = n => dhsLogo(n, {cls:"op", fb:"ini"});
 const unset = p => !p || p.startsWith("PASTE_");
 const dayKey = d => { const p = String(d).split("/"); return Math.floor(Date.UTC(+p[2], p[0] - 1, +p[1]) / 86400000) || 0; };
 
