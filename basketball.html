@@ -233,9 +233,9 @@ async function load(first){
   $("res").innerHTML = items.map(({t, g, pog}) => {
     const win = g.Result === "W";
     return `<a class="r" href="${t.page}#g${esc(g["Game #"])}">
-      <div class="m"><span><img class="tl" src="icons/${t.page.replace('.html','.png')}" alt=""><b>${t.name}</b> · ${esc(dateStr(g.Date))}</span><span class="fin">FINAL</span></div>
+      <div class="m"><span><img class="tl" src="diberville_warriors.png" style="object-fit:contain;border-radius:0" alt=""><b>${t.name}</b> · ${esc(dateStr(g.Date))}</span><span class="fin">FINAL</span></div>
       <div class="vs">
-        <div class="t ${win ? "w" : "l"}"><img src="icons/${t.page.replace('.html','.png')}" alt=""><div class="n">D’Iberville</div><div class="s">${esc(g["Our Score"])}</div></div>
+        <div class="t ${win ? "w" : "l"}"><img class="op" src="diberville_warriors.png" alt=""><div class="n">D’Iberville</div><div class="s">${esc(g["Our Score"])}</div></div>
         <div class="dash">–</div>
         <div class="t ${win ? "l" : "w"}">${oppLogo(g.Opponent)}<div class="n">${esc(g.Opponent)}</div><div class="s">${esc(g["Opp Score"])}</div></div>
       </div>

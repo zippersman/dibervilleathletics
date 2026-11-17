@@ -355,10 +355,10 @@ a.card:hover img{filter:drop-shadow(0 0 12px rgba(249,167,31,.8))}
     var g = it.g, win = g.Result === "W", tie = g.Result === "T";
     var line = it.pog ? it.sp.line(it.pog) : "";
     return '<a class="lr-card" href="' + it.page + '#g' + esc(g["Game #"]) + '">' +
-      '<div class="lr-m"><span><img class="lr-tl" src="icons/' + it.page.replace(".html", ".png") + '" alt=""><b>' + esc(it.team) + '</b> · ' + it.sp.label + '</span>' +
+      '<div class="lr-m"><span><img class="lr-tl" src="diberville_warriors.png" style="object-fit:contain;border-radius:0" alt=""><b>' + esc(it.team) + '</b> · ' + it.sp.label + '</span>' +
         '<span class="lr-r"><span class="lr-fin">FINAL</span>' + esc(dateStr(g.Date)) + '</span></div>' +
       '<div class="lr-vs">' +
-        '<div class="lr-t ' + (win || tie ? "w" : "l") + '"><img src="icons/' + it.page.replace(".html", ".png") + '" alt=""><div class="n">D’Iberville</div><div class="s">' + esc(g["Our Score"]) + '</div></div>' +
+        '<div class="lr-t ' + (win || tie ? "w" : "l") + '"><img class="op" src="diberville_warriors.png" alt=""><div class="n">D’Iberville</div><div class="s">' + esc(g["Our Score"]) + '</div></div>' +
         '<div class="lr-dash">–</div>' +
         '<div class="lr-t ' + (win ? "l" : "w") + '">' + window.dhsLogo(g.Opponent, {cls:"op", fb:"ini"}) + '<div class="n">' + esc(g.Opponent) + '</div><div class="s">' + esc(g["Opp Score"]) + '</div></div>' +
       '</div>' +
