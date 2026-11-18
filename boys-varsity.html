@@ -297,7 +297,7 @@ const num = v => { const n = parseFloat(String(v ?? "").replace("%","")); return
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const slug = n => String(n).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 const lg = (n, z = 26) => dhsLogo(n, {cls:"ol", w:z, h:z, fb:"remove"});
-const f1 = (v, pct) => { const n = num(v); return isNaN(n) ? "–" : n.toFixed(1) + (pct ? "%" : ""); };
+const f1 = (v, pct) => { const n = num(v); return isNaN(n) ? (pct ? "0.0%" : "0.0") : n.toFixed(1) + (pct ? "%" : ""); };
 
 function csv(t){
   const rows = []; let r = [], f = "", q = false;
@@ -335,7 +335,6 @@ async function load(first){
     P = objs(a, "Jersey").filter(p => p.Player && p.Jersey !== "");
     G = objs(b, "Game #").filter(g => g.Opponent && !isNaN(num(g["Our Score"])) && g["Our Score"] !== "");
     L = objs(c, "Game #").filter(x => x.Player);
-    if (!P.length) throw new Error("empty");
     window.__lastOk = new Date().toLocaleString([], {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"});
     const last = G.map(g => String(g.Date).split("/")).filter(p => p.length === 3 && !isNaN(Date.UTC(+p[2], p[0] - 1, +p[1]))).sort((x, y) => Date.UTC(+y[2], y[0] - 1, +y[1]) - Date.UTC(+x[2], x[0] - 1, +x[1]))[0];
     $("stamp").textContent = (last ? "Latest game on record: " + new Date(+last[2], last[0] - 1, +last[1]).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}) + ". " : "") + "Last checked " + window.__lastOk + ". Stats refresh automatically.";
@@ -370,18 +369,18 @@ function vOverview(){
   const cn = (a, r) => a.filter(x => x.Result === r).length;
   const rc2 = a => soc ? `${cn(a,"W")}–${cn(a,"L")}–${cn(a,"T")}` : `${cn(a,"W")}–${cn(a,"L")}`;
   const w = cn(G, "W");
-  const pc = (a, b) => b ? (a / b * 100).toFixed(1) + "%" : "–";
-  const pg = k => n ? (sum(k) / n).toFixed(1) : "–";
+  const pc = (a, b) => b ? (a / b * 100).toFixed(1) + "%" : "0.0%";
+  const pg = k => n ? (sum(k) / n).toFixed(1) : "0.0";
   const tile = (v, l) => `<div class="tile"><div class="v">${v}</div><div class="l">${l}</div></div>`;
   const sgn = v => (v >= 0 ? "+" : "") + v.toFixed(1);
   const cs = G.filter(g => num(g["Opp Score"]) === 0).length;
 
   /* column 1: team stats */
   const tiles = soc
-    ? [tile(n ? (pf/n).toFixed(1) : "–","Goals for / game"), tile(n ? (pa/n).toFixed(1) : "–","Goals against / game"), tile(n ? sgn((pf-pa)/n) : "–","Goal diff / game"), tile(cs,"Clean sheets"),
+    ? [tile(n ? (pf/n).toFixed(1) : "0.0","Goals for / game"), tile(n ? (pa/n).toFixed(1) : "0.0","Goals against / game"), tile(n ? sgn((pf-pa)/n) : "0.0","Goal diff / game"), tile(cs,"Clean sheets"),
        tile(pc(sum("Total_G"), sum("Total_SH")),"Shooting %"), tile(pc(sum("Total_SOT"), sum("Total_SH")),"On-target %"), tile(pg("Total_SH"),"Shots"), tile(pg("Total_SOT"),"Shots on target"),
        tile(pg("Total_CK"),"Corners"), tile(pg("Total_SAV"),"Saves"), tile(pg("Total_TKL"),"Tackles"), tile(pg("Total_FC"),"Fouls"), tile(sum("Total_YC"),"Yellow cards"), tile(sum("Total_RC"),"Red cards")]
-    : [tile(n ? (pf/n).toFixed(1) : "–","Points for"), tile(n ? (pa/n).toFixed(1) : "–","Points against"), tile(n ? sgn((pf-pa)/n) : "–","Avg margin"),
+    : [tile(n ? (pf/n).toFixed(1) : "0.0","Points for"), tile(n ? (pa/n).toFixed(1) : "0.0","Points against"), tile(n ? sgn((pf-pa)/n) : "0.0","Avg margin"),
        tile(pc(sum("Total_FGM"), sum("Total_FGA")),"FG%"), tile(pc(sum("Total_3PM"), sum("Total_3PA")),"3P%"), tile(pc(sum("Total_FTM"), sum("Total_FTA")),"FT%"),
        tile(pg("Total_REB"),"Rebounds"), tile(pg("Total_AST"),"Assists"), tile(pg("Total_TOV"),"Turnovers"), tile(pg("Total_STL"),"Steals"), tile(pg("Total_BLK"),"Blocks")];
 
@@ -462,7 +461,7 @@ const teamLine = () => `${TEAM} ${SEASON.split(" · ")[0]} ${SPORT}`.toUpperCase
 const seasonLine = () => (SEASON.split(" · ")[1] || "").toUpperCase();
 function fmt(s, p){
   if (isPct(s)) return f1(p[s[2]], true);
-  if (mode === "tot" && typeof s[3] === "string"){ const n = num(p[s[3]]); return isNaN(n) ? "–" : String(Math.round(n * 10) / 10); }
+  if (mode === "tot" && typeof s[3] === "string"){ const n = num(p[s[3]]); return isNaN(n) ? "0" : String(Math.round(n * 10) / 10); }
   return f1(p[s[2]]);
 }
 const modeBtns = () => `<div class="bigseg two"><button data-mode="pg" class="${mode === "pg" ? "on" : ""}">Per game</button><button data-mode="tot" class="${mode === "tot" ? "on" : ""}">Season totals</button></div>`;
@@ -476,7 +475,7 @@ function lcol(code){
   const s = stat(code);
   return {code, name:s[1], low:s[4] ? 1 : 0, pct:isPct(s), val:p => num(p[colOf(s)])};
 }
-const lshow = (c, p) => { const v = c.val(p); return isNaN(v) ? "–" : (c.pct || mode === "pg") ? v.toFixed(1) : String(Math.round(v * 10) / 10); };
+const lshow = (c, p) => { const v = c.val(p); return isNaN(v) ? (c.pct ? "0.0%" : "0.0") : (c.pct || mode === "pg") ? v.toFixed(1) : String(Math.round(v * 10) / 10); };
 let ldQ = "";
 const shownMsg = (n, t, lab) => `Showing ${n === t ? "all " : n + " of "}${t} player${t === 1 ? "" : "s"} for ${seasonLine().toLowerCase().replace(/^./, c => c.toUpperCase())} and the current sort${lab ? " (" + lab + ")" : ""}.`;
 function lfilter(){
@@ -505,6 +504,7 @@ function vLeaders(){
   <p class="note" style="margin-top:12px">EFG% = (FGM + 0.5 × 3PM) ÷ FGA. TS% = PTS ÷ (2 × (FGA + 0.44 × FTA)). Shooting percentages are season percentages in both views. Fewer is better for TO and FL, so those sort lowest first.</p></div>`;
 }
 function vProfile(){
+  if (!P.length) return `<h1>Player profile</h1><div class="msg">No players yet. Profiles will appear once the roster has been entered.</div>`;
   const p = P.find(x => x.Jersey === String(profJ)) || P[0];
   const gp = num(p.GP);
   const pick = `<label class="fl"><span>PLAYER</span><select id="ppick" aria-label="Choose a player">${P.map(x => `<option value="${esc(x.Jersey)}"${x === p ? " selected" : ""}>#${esc(x.Jersey)} ${esc(x.Player)}</option>`).join("")}</select></label>`;
@@ -623,7 +623,6 @@ function vRecords(){
 
 /* ---- routing ---- */
 function route(){
-  if (!P.length) return;
   let h = location.hash.slice(1) || "overview", tab = h, m;
   if (!TABS.some(t => t[0] === h) && (m = h.match(/^p([A-Za-z0-9_-]+)$/))){ tab = "profile"; profJ = m[1]; }
   else if ((m = h.match(/^g(\d+)$/))){ tab = "box"; boxN = m[1]; }
