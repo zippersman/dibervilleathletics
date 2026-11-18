@@ -130,7 +130,7 @@ body{min-height:100vh;background-repeat:no-repeat}
 <div class="wrap">
   <div class="top"><img src="icons/basketball.png" alt="D’Iberville Warriors logo"><div><b>D’IBERVILLE BASKETBALL</b><span>Season 2026–2027</span></div><a class="back" href="index.html">← Main menu</a></div>
 
-  <div class="eyebrow">4 TEAMS</div>
+  <div class="eyebrow">5 TEAMS</div>
   <h1>Pick your team</h1>
   <p class="lede">Choose a team to see its schedule, player stats, leaders and box scores.</p>
 
@@ -151,6 +151,10 @@ body{min-height:100vh;background-repeat:no-repeat}
       <div class="h"><img src="icons/boys-jv.png" alt=""><div><h3>Boys JV</h3><p>D’Iberville Boys Junior Varsity</p></div></div>
       <div class="f"><span class="open" style="color:#f9a71f">Open team <i class="ar">→</i></span><span class="pill">Record <b id="rec-bjv">–</b></span></div>
     </a>
+    <a class="card" href="boys-freshman.html" style="--c:#f9a71f">
+      <div class="h"><img src="icons/boys-freshman.png" alt=""><div><h3>Boys Freshman</h3><p>D’Iberville Boys Freshman</p></div></div>
+      <div class="f"><span class="open" style="color:#f9a71f">Open team <i class="ar">→</i></span><span class="pill">Record <b id="rec-bf">–</b></span></div>
+    </a>
   </div>
 
   <div class="eyebrow" style="margin-top:44px">AROUND THE TEAMS</div>
@@ -166,6 +170,7 @@ const PUB_V  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnya9kcfLmsGzYh
 const PUB_JV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ44GizEl-QSqMxkmIrr0jCHxqbbGOF8dzLUQXTZVxhVaxWu6gk31UGzuOw5an5gczQP83_i7Yv2mHI/pubhtml"; // same link you pasted into girls-jv.html
 const PUB_BV  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpDXdB018lquHSr0fnhvg9S8P114LzLHDSDJHOcIZurwnKG_6W8zqaQJn2JniBDTOKt_pseFpCH5A1/pubhtml"; // same link you paste into boys-varsity.html
 const PUB_BJV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQiF8TSkPAyRmv-hcX2HC8w8_jq39xUOc5-YJDlqsvDRUBf8svrZ7vD0_9lgypMF4vpFHbLPhDTKrMc/pubhtml"; // same link you paste into boys-jv.html
+const PUB_BF = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSVQvdme6lwkdvL3yDPb8CUBxn3aXKHRHte6B581ujRndGD_ZEDk3wRvPQUvujGdcX4jC12nw5vXnsp/pubhtml"; // same link you paste into boys-freshman.html
 /* ===================== */
 const PER_TEAM = 3; // most recent games shown for each team
 const GID = {sched:1598752444, log:1696552548};
@@ -173,7 +178,8 @@ const TEAMS = [
   {name:"GIRLS VARSITY", page:"girls-varsity.html", pub:PUB_V,  rec:"rec-v",  gid:GID},
   {name:"GIRLS JV",      page:"girls-jv.html",      pub:PUB_JV, rec:"rec-jv", gid:GID},
   {name:"BOYS VARSITY",  page:"boys-varsity.html",  pub:PUB_BV, rec:"rec-bv", gid:GID},
-  {name:"BOYS JV",       page:"boys-jv.html",       pub:PUB_BJV, rec:"rec-bjv", gid:GID}
+  {name:"BOYS JV",       page:"boys-jv.html",       pub:PUB_BJV, rec:"rec-bjv", gid:GID},
+  {name:"BOYS FRESHMAN", page:"boys-freshman.html", pub:PUB_BF, rec:"rec-bf", gid:GID}
 ];
 const $ = id => document.getElementById(id);
 const num = v => { const n = parseFloat(String(v ?? "")); return isNaN(n) ? NaN : n; };

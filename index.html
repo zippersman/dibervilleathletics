@@ -196,8 +196,8 @@ body{min-height:100vh;background-repeat:no-repeat}
 
   <div class="cards" style="margin-top:20px">
     <a class="card sport" href="basketball.html" style="--c:#f9a71f">
-      <div class="h"><img src="icons/basketball.png" alt=""><div><h3>Basketball</h3><p>Girls &amp; Boys · Varsity &amp; JV</p></div></div>
-      <div class="f"><span class="open" style="color:#f9a71f">Open basketball <i class="ar">→</i></span><span class="pill"><b>4</b> teams</span></div>
+      <div class="h"><img src="icons/basketball.png" alt=""><div><h3>Basketball</h3><p>Girls &amp; Boys · Varsity, JV &amp; Freshman</p></div></div>
+      <div class="f"><span class="open" style="color:#f9a71f">Open basketball <i class="ar">→</i></span><span class="pill"><b>5</b> teams</span></div>
     </a>
     <a class="card sport" href="soccer.html" style="--c:#f9a71f">
       <div class="h"><img src="icons/soccer.png" alt=""><div><h3>Soccer</h3><p>Girls &amp; Boys · Varsity &amp; JV</p></div></div>
@@ -255,7 +255,7 @@ body{min-height:100vh;background-repeat:no-repeat}
 </div>
 <script>
 /* "Latest results" strip for the main menu (index.html).
-   Pulls the newest finished games from all 8 team sheets (basketball + soccer) and shows them
+   Pulls the newest finished games from all 9 team sheets (basketball + soccer) and shows them
    as cards. It places itself between the "Pick your sport" cards and the "Get the app" section.
    Needs logos.js loaded first. */
 (function(){
@@ -266,7 +266,8 @@ body{min-height:100vh;background-repeat:no-repeat}
     PUB_V:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnya9kcfLmsGzYh4hxF0uiv9o9VyIRpfN__YCz3lgHZOuWrIiDbK8JMpCsz4o0VIMRQiDGF4SU_Swk/pubhtml",
     PUB_JV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ44GizEl-QSqMxkmIrr0jCHxqbbGOF8dzLUQXTZVxhVaxWu6gk31UGzuOw5an5gczQP83_i7Yv2mHI/pubhtml",
     PUB_BV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpDXdB018lquHSr0fnhvg9S8P114LzLHDSDJHOcIZurwnKG_6W8zqaQJn2JniBDTOKt_pseFpCH5A1/pubhtml",
-    PUB_BJV:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQiF8TSkPAyRmv-hcX2HC8w8_jq39xUOc5-YJDlqsvDRUBf8svrZ7vD0_9lgypMF4vpFHbLPhDTKrMc/pubhtml"
+    PUB_BJV:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQiF8TSkPAyRmv-hcX2HC8w8_jq39xUOc5-YJDlqsvDRUBf8svrZ7vD0_9lgypMF4vpFHbLPhDTKrMc/pubhtml",
+    PUB_BF:"https://docs.google.com/spreadsheets/d/e/2PACX-1vSVQvdme6lwkdvL3yDPb8CUBxn3aXKHRHte6B581ujRndGD_ZEDk3wRvPQUvujGdcX4jC12nw5vXnsp/pubhtml"
   };
   var SC = {
     PUB_V:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ04weNQhPndf6Sv4JCgfGW7-L4hZUCTcN9C7lO-8Vq27gXMT0CzOvj-Q5bYvjKSjfTS7BRkzbSpT5c/pubhtml",
@@ -285,7 +286,7 @@ body{min-height:100vh;background-repeat:no-repeat}
   var scLine = function(p){ return ["G","A","SAV","TKL"].filter(function(k){ return num(p[k]) >= 1; }).map(function(k){ return num(p[k]) + " " + k; }).join(" · ") + (num(p.CS) >= 1 ? " · CS" : ""); };
 
   var SPORTS = [
-    {label:"Basketball", pubs:BB, score:bbScore, line:bbLine, teams:[["Girls Varsity","girls-varsity.html","PUB_V"],["Girls JV","girls-jv.html","PUB_JV"],["Boys Varsity","boys-varsity.html","PUB_BV"],["Boys JV","boys-jv.html","PUB_BJV"]]},
+    {label:"Basketball", pubs:BB, score:bbScore, line:bbLine, teams:[["Girls Varsity","girls-varsity.html","PUB_V"],["Girls JV","girls-jv.html","PUB_JV"],["Boys Varsity","boys-varsity.html","PUB_BV"],["Boys JV","boys-jv.html","PUB_BJV"],["Boys Freshman","boys-freshman.html","PUB_BF"]]},
     {label:"Soccer",     pubs:SC, score:scScore, line:scLine, teams:[["Girls Varsity","soccer-girls-varsity.html","PUB_V"],["Girls JV","soccer-girls-jv.html","PUB_JV"],["Boys Varsity","soccer-boys-varsity.html","PUB_BV"],["Boys JV","soccer-boys-jv.html","PUB_BJV"]]}
   ];
 
