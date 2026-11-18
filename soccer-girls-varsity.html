@@ -43,7 +43,7 @@ th:first-child,td:first-child,.l{text-align:left}
 th{color:var(--mute);font-size:14px;font-weight:600}
 th.s{cursor:pointer}
 tr:last-child td{border-bottom:0}
-tr.go{cursor:pointer}tr.go:hover td{background:#22262c}
+tr.up td{color:var(--mute)}tr.up td.l{color:var(--ink)}tr.go{cursor:pointer}tr.go:hover td{background:#22262c}
 tr.tot td{font-weight:700;color:var(--gold)}
 .W{color:var(--win);font-weight:700}.Lo{color:var(--loss);font-weight:700}.T{color:var(--mute);font-weight:700}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
@@ -267,7 +267,7 @@ const HEAD = [["G","Goals"],["A","Assists"],["SH","Shots"],["SAV","Saves"],["SH%
 const LEAD = [["Goals","GPG","Total_G"],["Assists","APG","Total_A"],["Shots on target","SOT_PG","Total_SOT"],["Saves","SAV_PG","Total_SAV"],["Tackles","TKL_PG","Total_TKL"],["Shooting %","SH_PCT"],["Save %","SV_PCT"]];
 const BOX = ["MIN","G","A","SH","SOT","SAV","GA","TKL","CK","OFF","FC","YC","RC"];
 
-let P = [], G = [], L = [], sortK = "GPG", sortD = -1, mode = "pg", profJ = null, boxN = null;
+let S = [], P = [], G = [], L = [], sortK = "GPG", sortD = -1, mode = "pg", profJ = null, boxN = null;
 const $ = id => document.getElementById(id);
 const num = v => { const n = parseFloat(String(v ?? "").replace("%","")); return isNaN(n) ? NaN : n; };
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -310,6 +310,7 @@ async function load(first){
   try{
     const [a, b, c] = await Promise.all([grab(GID.looker), grab(GID.sched), grab(GID.log)]);
     P = objs(a, "Jersey").filter(p => p.Player && p.Jersey !== "");
+    S = objs(b, "Game #").filter(g => g.Opponent && g.Date);
     G = objs(b, "Game #").filter(g => g.Opponent && !isNaN(num(g["Our Score"])) && g["Our Score"] !== "");
     L = objs(c, "Game #").filter(x => x.Player);
     window.__lastOk = new Date().toLocaleString([], {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"});
@@ -413,7 +414,7 @@ function vOverview(){
 }
 function vSchedule(){
   return `<h1>Schedule</h1><div class="scroll"><table><thead><tr><th>#</th><th>Date</th><th class="l">Opponent</th><th>Result</th><th>Score</th><th>Record</th></tr></thead><tbody>` +
-   G.map(g => `<tr class="go" data-go="g${g["Game #"]}"><td>${esc(g["Game #"])}</td><td>${esc(g.Date)}</td><td class="l">${g["Home / Away"] === "Away" ? "@" : "vs"} ${lg(g.Opponent)}${esc(g.Opponent)}</td><td class="${rc(g.Result)}">${esc(g.Result)}</td><td>${g["Our Score"]}–${g["Opp Score"]}</td><td>${esc(g.Record)}</td></tr>`).join("") +
+   S.map(g => !(g["Our Score"] !== "" && !isNaN(num(g["Our Score"]))) ? `<tr class="up"><td>${esc(g["Game #"])}</td><td>${esc(g.Date)}</td><td class="l">${g["Home / Away"] === "Away" ? "@" : "vs"} ${lg(g.Opponent)}${esc(g.Opponent)}</td><td colspan="3">Upcoming</td></tr>` : `<tr class="go" data-go="g${g["Game #"]}"><td>${esc(g["Game #"])}</td><td>${esc(g.Date)}</td><td class="l">${g["Home / Away"] === "Away" ? "@" : "vs"} ${lg(g.Opponent)}${esc(g.Opponent)}</td><td class="${rc(g.Result)}">${esc(g.Result)}</td><td>${g["Our Score"]}–${g["Opp Score"]}</td><td>${esc(g.Record)}</td></tr>`).join("") +
    `</tbody></table></div><p class="note">Record is wins–losses–ties. Tap a game to see its box score.</p>`;
 }
 const PCOLS = [["Player","Player"],["GP","GP"],["MPG","MIN"],["GPG","G"],["APG","A"],["SH_PG","SH"],["SOT_PG","SOT"],["SH_PCT","SH%"],["SAV_PG","SAV"],["TKL_PG","TKL"]];
