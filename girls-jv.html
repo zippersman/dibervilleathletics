@@ -254,14 +254,24 @@ select{box-shadow:0 0 16px rgba(249,167,31,.3)}
 <script src="nav.js" defer></script>
 <link rel="stylesheet" href="loader.css">
 <script src="loader.js" defer></script>
+<style>
+.dhs-contact{margin-top:6px;line-height:1.6}
+.dhs-contact a{color:var(--gold,#f9a71f);text-decoration:underline;text-underline-offset:2px}
+.dhs-foot{margin-top:18px;margin-bottom:40px;color:var(--mute,#9aa1ad);font-size:13px;text-align:center}
+.retry{margin-top:12px;background:var(--gold,#f9a71f);color:#111;border:0;border-radius:8px;padding:10px 18px;font:700 14px Barlow,system-ui,sans-serif;cursor:pointer}
+.retry:hover,.retry:focus-visible{filter:brightness(1.1);outline:2px solid #fff;outline-offset:2px}
+.dhs-nojs{margin:16px;padding:14px 16px;border:1px solid #f9a71f;border-radius:10px;background:#181b21;color:#f1f2f4;font:16px/1.5 system-ui,sans-serif}
+</style>
 </head>
 <body>
+<noscript><div class="dhs-nojs"><b>JavaScript is turned off.</b> This site needs JavaScript to load schedules and stats. Please turn it on in your browser settings and reload. Questions? Email Minh.TranNguyen@harrison.k12.ms.us.</div></noscript>
 <header><div class="wrap hd">
   <a class="back" href="basketball.html">← Basketball</a>
   <nav id="nav"></nav>
 </div></header>
 <main class="wrap" id="main"><div class="msg">Loading…</div></main>
 <div class="wrap"><p class="note" id="stamp"></p></div>
+<footer class="dhs-foot">&copy; D’Iberville Athletics 2026 · Made by Minh Tran Nguyen<div class="dhs-contact">Spot a mistake or have a question? <a id="dhs-report" href="mailto:minhtrannguyen2007@gmail.com,Minh.TranNguyen@harrison.k12.ms.us">Report it</a><br>Minh.TranNguyen@harrison.k12.ms.us &middot; minhtrannguyen2007@gmail.com</div></footer>
 
 <script>
 /* ===== SETTINGS ===== */
@@ -326,10 +336,13 @@ async function load(first){
     G = objs(b, "Game #").filter(g => g.Opponent && !isNaN(num(g["Our Score"])) && g["Our Score"] !== "");
     L = objs(c, "Game #").filter(x => x.Player);
     if (!P.length) throw new Error("empty");
-    $("stamp").textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"}) + ". Stats refresh automatically.";
+    window.__lastOk = new Date().toLocaleString([], {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"});
+    const last = G.map(g => String(g.Date).split("/")).filter(p => p.length === 3 && !isNaN(Date.UTC(+p[2], p[0] - 1, +p[1]))).sort((x, y) => Date.UTC(+y[2], y[0] - 1, +y[1]) - Date.UTC(+x[2], x[0] - 1, +x[1]))[0];
+    $("stamp").textContent = (last ? "Latest game on record: " + new Date(+last[2], last[0] - 1, +last[1]).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}) + ". " : "") + "Last checked " + window.__lastOk + ". Stats refresh automatically.";
     route();
   }catch(e){
-    if (first || !P.length) $("main").innerHTML = `<div class="msg"><b>Couldn’t load the stats.</b><p>Check that your Google Sheet is published to the web (File → Share → Publish to web → Entire document) and that the link in <code>PUB</code> is correct, then reload.</p></div>`;
+    if (first || !P.length) $("main").innerHTML = `<div class="msg" role="alert"><b>Couldn’t load the stats.</b><p>This is usually a weak or dropped connection. Check that you’re online and try again. If it keeps happening, tap “Report it” at the bottom of the page.</p><button type="button" class="retry" onclick="document.getElementById('main').innerHTML='<div class=&quot;msg&quot;>Loading…</div>';load(true)">Try again</button></div>`;
+    else $("stamp").textContent = "Couldn’t refresh just now. Showing stats from " + (window.__lastOk || "earlier") + ". Will try again shortly.";
   }
 }
 
@@ -651,6 +664,14 @@ addEventListener("hashchange", route);
 
 load(true);
 setInterval(() => load(false), 120000);
+</script>
+<script>
+(function(){
+  if ("serviceWorker" in navigator) addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+  var a = document.getElementById("dhs-report");
+  if (a) a.href = "mailto:minhtrannguyen2007@gmail.com,Minh.TranNguyen@harrison.k12.ms.us?subject=" + encodeURIComponent("D\u2019Iberville Athletics stats correction") +
+    "&body=" + encodeURIComponent("Page: " + location.href + "\n\nWhat looks wrong:\n");
+})();
 </script>
 </body>
 </html>

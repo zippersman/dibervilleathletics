@@ -22,9 +22,6 @@ body{margin:0;background:radial-gradient(1000px 420px at 50% -80px,#2a2110,trans
 .top img{width:46px;height:46px;border-radius:11px;display:block}
 .top b{font:800 22px/1 "Barlow Condensed",sans-serif;letter-spacing:.02em}
 .top span{display:block;color:var(--mute);font-size:13px}
-.wip{background:repeating-linear-gradient(-45deg,var(--gold) 0 14px,#16181d 14px 28px);border-radius:10px;padding:3px}
-.wip div{background:#16181d;border-radius:8px;padding:9px 14px;text-align:center;font:700 16px "Barlow Condensed",sans-serif;letter-spacing:.14em;color:var(--gold)}
-.wip small{display:block;margin-top:4px;font:600 13px "Barlow Condensed",sans-serif;letter-spacing:.12em;color:var(--ink);opacity:.85}
 .eyebrow{font:700 13px "Barlow Condensed",sans-serif;letter-spacing:.14em;color:var(--gold);margin:30px 0 4px}
 h1{font:800 clamp(38px,8vw,64px)/.95 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:6px 0 8px}
 h2{font:800 30px/1 "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 14px}
@@ -104,11 +101,19 @@ body{min-height:100vh;background-repeat:no-repeat}
 <script src="nav.js" defer></script>
 <link rel="stylesheet" href="loader.css">
 <script src="loader.js" defer></script>
+<style>
+.dhs-contact{margin-top:6px;line-height:1.6}
+.dhs-contact a{color:var(--gold,#f9a71f);text-decoration:underline;text-underline-offset:2px}
+.dhs-foot{margin-top:18px;margin-bottom:40px;color:var(--mute,#9aa1ad);font-size:13px;text-align:center}
+.retry{margin-top:12px;background:var(--gold,#f9a71f);color:#111;border:0;border-radius:8px;padding:10px 18px;font:700 14px Barlow,system-ui,sans-serif;cursor:pointer}
+.retry:hover,.retry:focus-visible{filter:brightness(1.1);outline:2px solid #fff;outline-offset:2px}
+.dhs-nojs{margin:16px;padding:14px 16px;border:1px solid #f9a71f;border-radius:10px;background:#181b21;color:#f1f2f4;font:16px/1.5 system-ui,sans-serif}
+</style>
 </head>
 <body>
+<noscript><div class="dhs-nojs"><b>JavaScript is turned off.</b> This site needs JavaScript to load schedules and stats. Please turn it on in your browser settings and reload. Questions? Email Minh.TranNguyen@harrison.k12.ms.us.</div></noscript>
 <div class="wrap">
   <div class="top"><img src="icons/soccer.png" alt="D’Iberville Warriors logo"><div><b>D’IBERVILLE SOCCER</b><span>Season 2026–2027</span></div><a class="back" href="index.html">← Main menu</a></div>
-  <div class="wip" role="status"><div>WORK IN PROGRESS · MORE SOCCER STATS COMING SOON<small>ALL TEAMS ARE IN A SAMPLE SEASON · STATS SHOWN ARE NOT REAL</small></div></div>
 
   <div class="eyebrow">4 TEAMS</div>
   <h1>Pick your team</h1>
@@ -137,7 +142,7 @@ body{min-height:100vh;background-repeat:no-repeat}
   <h2>Latest results</h2>
   <div class="res" id="res"><div class="msg">Loading…</div></div>
 
-  <footer>© D’Iberville Soccer 2026 · Work in progress · Made by Minh Tran Nguyen</footer>
+  <footer>© D’Iberville Soccer 2026 · Made by Minh Tran Nguyen<div class="dhs-contact">Spot a mistake or have a question? <a id="dhs-report" href="mailto:minhtrannguyen2007@gmail.com,Minh.TranNguyen@harrison.k12.ms.us">Report it</a><br>Minh.TranNguyen@harrison.k12.ms.us &middot; minhtrannguyen2007@gmail.com</div></footer>
 </div>
 
 <script>
@@ -214,7 +219,9 @@ async function load(first){
   const out = await Promise.all(TEAMS.map(t => loadTeam(t).catch(() => null)));
   const items = out.filter(Boolean).flatMap(a => a.slice().sort((x, y) => y.k - x.k).slice(0, PER_TEAM)).sort((x, y) => y.k - x.k);
   if (!items.length){
-    if (first) $("res").innerHTML = `<div class="msg">Couldn’t load results right now. Please try again in a few minutes.</div>`;
+    if (first) $("res").innerHTML = out.every(a => !a)
+      ? `<div class="msg" role="alert">Couldn’t load results right now. Check your connection and try again.<br><button type="button" class="retry" onclick="document.getElementById('res').innerHTML='<div class=&quot;msg&quot;>Loading…</div>';load(true)">Try again</button></div>`
+      : `<div class="msg">No games have been played yet. Check back after the next game.</div>`;
     return;
   }
   $("res").innerHTML = items.map(({t, g, pog}) => {
@@ -232,6 +239,14 @@ async function load(first){
 }
 load(true);
 setInterval(() => load(false), 120000);
+</script>
+<script>
+(function(){
+  if ("serviceWorker" in navigator) addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+  var a = document.getElementById("dhs-report");
+  if (a) a.href = "mailto:minhtrannguyen2007@gmail.com,Minh.TranNguyen@harrison.k12.ms.us?subject=" + encodeURIComponent("D\u2019Iberville Athletics stats correction") +
+    "&body=" + encodeURIComponent("Page: " + location.href + "\n\nWhat looks wrong:\n");
+})();
 </script>
 </body>
 </html>
