@@ -257,7 +257,7 @@ const GID = {looker:127058417, sched:1598752444, log:1696552548};
 const TABS = [["overview","Overview"],["schedule","Schedule"],["players","Players"],["leaders","Leaders"],["records","Stat Record"],["profile","Profile"],["box","Box score"]];
 /* [code, name, per-game column, season column (or [[made cols],[attempt cols]] for percentages), 1 = lower is better] */
 const STATS = [
- ["MIN","Minutes","MPG","Total_MIN"],["SH","Shots","SH_PG","Total_SH"],["SOT","Shots on target","SOT_PG","Total_SOT"],
+ ["SH","Shots","SH_PG","Total_SH"],["SOT","Shots on target","SOT_PG","Total_SOT"],
  ["SOT%","On-target %","SOT_PCT",[["Total_SOT"],["Total_SH"]]],["G","Goals","GPG","Total_G"],["A","Assists","APG","Total_A"],
  ["SH%","Shooting %","SH_PCT",[["Total_G"],["Total_SH"]]],["SAV","Saves","SAV_PG","Total_SAV"],["GA","Goals against","GAA","Total_GA",1],
  ["SV%","Save %","SV_PCT",[["Total_SAV"],["Total_SAV","Total_GA"]]],["CS","Clean sheets","CS_PG","Total_CS"],["G+A","Goal contributions","GCON_PG","Total_GCON"],
@@ -265,7 +265,7 @@ const STATS = [
  ["YC","Yellow cards","YC_PG","Total_YC",1],["RC","Red cards","RC_PG","Total_RC",1],["TKL","Tackles","TKL_PG","Total_TKL"]];
 const HEAD = [["G","Goals"],["A","Assists"],["SH","Shots"],["SAV","Saves"],["SH%","Shooting %"]];
 const LEAD = [["Goals","GPG","Total_G"],["Assists","APG","Total_A"],["Shots on target","SOT_PG","Total_SOT"],["Saves","SAV_PG","Total_SAV"],["Tackles","TKL_PG","Total_TKL"],["Shooting %","SH_PCT"],["Save %","SV_PCT"]];
-const BOX = ["MIN","G","A","SH","SOT","SAV","GA","TKL","CK","OFF","FC","YC","RC"];
+const BOX = ["G","A","SH","SOT","SAV","GA","TKL","CK","OFF","FC","YC","RC"];
 
 let S = [], P = [], G = [], L = [], sortK = "GPG", sortD = -1, mode = "pg", profJ = null, boxN = null;
 const $ = id => document.getElementById(id);
@@ -417,7 +417,7 @@ function vSchedule(){
    S.map(g => !(g["Our Score"] !== "" && !isNaN(num(g["Our Score"]))) ? `<tr class="up"><td>${esc(g["Game #"])}</td><td>${esc(g.Date)}</td><td class="l">${g["Home / Away"] === "Away" ? "@" : "vs"} ${lg(g.Opponent)}${esc(g.Opponent)}</td><td colspan="3">Upcoming</td></tr>` : `<tr class="go" data-go="g${g["Game #"]}"><td>${esc(g["Game #"])}</td><td>${esc(g.Date)}</td><td class="l">${g["Home / Away"] === "Away" ? "@" : "vs"} ${lg(g.Opponent)}${esc(g.Opponent)}</td><td class="${rc(g.Result)}">${esc(g.Result)}</td><td>${g["Our Score"]}–${g["Opp Score"]}</td><td>${esc(g.Record)}</td></tr>`).join("") +
    `</tbody></table></div><p class="note">Record is wins–losses–ties. Tap a game to see its box score.</p>`;
 }
-const PCOLS = [["Player","Player"],["GP","GP"],["MPG","MIN"],["GPG","G"],["APG","A"],["SH_PG","SH"],["SOT_PG","SOT"],["SH_PCT","SH%"],["SAV_PG","SAV"],["TKL_PG","TKL"]];
+const PCOLS = [["Player","Player"],["GP","GP"],["GPG","G"],["APG","A"],["SH_PG","SH"],["SOT_PG","SOT"],["SH_PCT","SH%"],["SAV_PG","SAV"],["TKL_PG","TKL"]];
 function vPlayers(){
   const rows = [...P].sort((a,b) => sortK === "Player" ? sortD * a.Player.localeCompare(b.Player) : sortD * ((num(a[sortK]) || -1) - (num(b[sortK]) || -1)));
   return `<h1>Players</h1><div class="scroll"><table><thead><tr><th class="s l" tabindex="0" data-sort="Jersey">#</th>${PCOLS.map(c => `<th class="s${c[0] === "Player" ? " l" : ""}" tabindex="0" data-sort="${c[0]}">${c[1]}${sortK === c[0] ? (sortD < 0 ? " ▼" : " ▲") : ""}</th>`).join("")}</tr></thead><tbody>` +
@@ -426,10 +426,10 @@ function vPlayers(){
 }
 /* ---- leaders + profile (stat-table look) ---- */
 const SPORT = "Soccer";
-const LTABS = [["Attack",["G","A","G+A","SH","SOT","SH%","SOT%"]],["Goalkeeping",["SAV","GA","SV%","CS"]],["Defense",["TKL","FC","YC","RC"]],["Other",["MIN","CK","OFF"]]];     /* [tab name, [stat codes shown as columns]] */
-const GROUPS = [["Attack",["G","A","G+A","SH","SOT","SH%","SOT%"]],["Goalkeeping",["SAV","GA","SV%","CS"]],["Defense & discipline",["TKL","FC","YC","RC"]],["Other",["MIN","CK","OFF"]]];   /* [group name, [stat codes]] for the profile stat line */
-const GRANK = {"Attack":"G+A","Goalkeeping":"SAV","Defense & discipline":"TKL","Other":"MIN"};   /* stat each category's RANK pill is based on */
-const GLOG = [["MIN","MIN"],["G","G"],["A","A"],["SH","SH"],["SOT","SOT"],["SAV","SAV"],["GA","GA"],["TKL","TKL"],["CK","CK"],["OFF","OFF"],["FC","FC"],["YC","YC"],["RC","RC"]];       /* [label, column or [made, attempted]] shown in each game-log row */
+const LTABS = [["Attack",["G","A","G+A","SH","SOT","SH%","SOT%"]],["Goalkeeping",["SAV","GA","SV%","CS"]],["Defense",["TKL","FC","YC","RC"]],["Other",["CK","OFF"]]];     /* [tab name, [stat codes shown as columns]] */
+const GROUPS = [["Attack",["G","A","G+A","SH","SOT","SH%","SOT%"]],["Goalkeeping",["SAV","GA","SV%","CS"]],["Defense & discipline",["TKL","FC","YC","RC"]],["Other",["CK","OFF"]]];   /* [group name, [stat codes]] for the profile stat line */
+const GRANK = {"Attack":"G+A","Goalkeeping":"SAV","Defense & discipline":"TKL","Other":"CK"};   /* stat each category's RANK pill is based on */
+const GLOG = [["G","G"],["A","A"],["SH","SH"],["SOT","SOT"],["SAV","SAV"],["GA","GA"],["TKL","TKL"],["CK","CK"],["OFF","OFF"],["FC","FC"],["YC","YC"],["RC","RC"]];       /* [label, column or [made, attempted]] shown in each game-log row */
 let ldT = 0, ldK = null, ldD = -1;
 const precord = p => { const gp = num(p.GP), t = Math.max(0, gp - (num(p.W) || 0) - (num(p.L) || 0)); return `${p.W}–${p.L}–${t}`; };
 const stat = k => STATS.find(s => s[0] === k);
@@ -517,14 +517,14 @@ function vBox(){
 
 /* ---- stat records ---- */
 /* Optional history from earlier seasons. Fill these in and the Single Season / All-Time (and older single-game / single-month) records pick them up.
-   HIST: one row per player per past season, e.g. {season:"2025–26", player:"Name", GP:22, MIN:600, PTS:310, REB:120, AST:80, ...} (season totals, same stat codes as the table)
+   HIST: one row per player per past season, e.g. {season:"2025–26", player:"Name", GP:22, PTS:310, REB:120, AST:80, ...} (season totals, same stat codes as the table)
    HISTBEST: older single-game / single-month records, e.g. {scope:"game", stat:"PTS", value:41, who:"Name", when:"Jan 9, 2024"} */
 const HIST = [];
 const HISTBEST = [];
 let recScope = "game", recCat = "", recStat = "";
 const REC_SCOPES = [["game","Single Game"],["month","Single Month"],["season","Single Season"],["career","All-Time"]];
 function vRecords(){
-  const soc = SPORT === "Soccer", MINQ = soc ? 45 : 20, MING = {game:1, month:2, season:5, career:8};
+  const soc = SPORT === "Soccer", MING = {game:1, month:2, season:5, career:8};
   const R = soc
     ? [["G","Goals","G","Total_G","Attacking"],["A","Assists","A","Total_A","Attacking"],["G+A","Goal contributions",["G","A"],"Total_GCON","Attacking"],["SH","Shots","SH","Total_SH","Attacking"],["SOT","Shots on target","SOT","Total_SOT","Attacking"],["CK","Corners","CK","Total_CK","Attacking"],["TKL","Tackles","TKL","Total_TKL","Defending"],["SAV","Saves","SAV","Total_SAV","Goalkeeping"],["GA","Goals against (keepers)","GA","Total_GA","Goalkeeping",1]]
     : [["PTS","Points","PTS","Total_PTS","Scoring"],["FGM","Field goals made","FGM","Total_FGM","Scoring"],["3PM","3-pointers made","3PM","Total_3PM","Scoring"],["FTM","Free throws made","FTM","Total_FTM","Scoring"],["REB","Rebounds","REB","Total_REB","Rebounding"],["OREB","Offensive rebounds","OREB","Total_OREB","Rebounding"],["DREB","Defensive rebounds","DREB","Total_DREB","Rebounding"],["AST","Assists","AST","Total_AST","Playmaking"],["STL","Steals","STL","Total_STL","Defense"],["BLK","Blocks","BLK","Total_BLK","Defense"],["TOV","Turnovers","TOV","Total_TOV","Discipline",1],["PF","Fouls","PF","Total_PF","Discipline",1]];
@@ -534,26 +534,26 @@ function vRecords(){
   const gm = {}; G.forEach(g => { const q = String(g.Date).split("/"), dt = new Date(+q[2], q[0] - 1, +q[1]); gm[g["Game #"]] = {g, dt: isNaN(dt) ? null : dt}; });
   const mlab = dt => dt ? dt.toLocaleDateString("en-US", {month:"long", year:"numeric"}) : "?";
   const zero = () => Object.fromEntries(defs.map(d => [d[0], 0]));
-  const mk = (who, jer, gp, min, v, ctx) => ({who, jer, gp, min, v, ctx});
+  const mk = (who, jer, gp, v, ctx) => ({who, jer, gp, v, ctx});
   const games = [], months = {}, seasons = [], careers = {};
   L.forEach(r => {
     const info = gm[r["Game #"]]; if (!info) return;
     const v = {}; defs.forEach(d => v[d[0]] = lv(r, d));
-    const min = num(r.MIN) || 0, jer = r["Jersey #"];
-    games.push(mk(r.Player, jer, 1, min, v, `${info.g["Home / Away"] === "Away" ? "@" : "vs"} ${info.g.Opponent} · ${gdate(info.g.Date)}`));
+    const jer = r["Jersey #"];
+    games.push(mk(r.Player, jer, 1, v, `${info.g["Home / Away"] === "Away" ? "@" : "vs"} ${info.g.Opponent} · ${gdate(info.g.Date)}`));
     const k = r.Player + "|" + mlab(info.dt), m = months[k] || (months[k] = mk(r.Player, jer, 0, 0, zero(), mlab(info.dt)));
-    m.gp++; m.min += min; defs.forEach(d => m.v[d[0]] += v[d[0]]);
+    m.gp++; defs.forEach(d => m.v[d[0]] += v[d[0]]);
   });
-  const addCareer = e => { const k = String(e.who).toLowerCase(), c = careers[k] || (careers[k] = mk(e.who, e.jer, 0, 0, zero(), "Career")); c.gp += e.gp; c.min += e.min; defs.forEach(d => c.v[d[0]] += e.v[d[0]] || 0); if (e.jer) c.jer = e.jer; };
-  pool().forEach(p => { const v = {}; defs.forEach(d => v[d[0]] = num(p[d[3]]) || 0); const e = mk(p.Player, p.Jersey, num(p.GP) || 0, num(p.Total_MIN) || 0, v, "This season"); seasons.push(e); addCareer(e); });
-  HIST.forEach(h => { const v = {}; defs.forEach(d => v[d[0]] = num(h[d[0]]) || 0); const e = mk(h.player, "", num(h.GP) || 0, num(h.MIN) || 0, v, h.season || ""); seasons.push(e); addCareer(e); });
+  const addCareer = e => { const k = String(e.who).toLowerCase(), c = careers[k] || (careers[k] = mk(e.who, e.jer, 0, zero(), "Career")); c.gp += e.gp; defs.forEach(d => c.v[d[0]] += e.v[d[0]] || 0); if (e.jer) c.jer = e.jer; };
+  pool().forEach(p => { const v = {}; defs.forEach(d => v[d[0]] = num(p[d[3]]) || 0); const e = mk(p.Player, p.Jersey, num(p.GP) || 0, v, "This season"); seasons.push(e); addCareer(e); });
+  HIST.forEach(h => { const v = {}; defs.forEach(d => v[d[0]] = num(h[d[0]]) || 0); const e = mk(h.player, "", num(h.GP) || 0, v, h.season || ""); seasons.push(e); addCareer(e); });
   const best = (entries, d, scope) => {
     const lo = !!d[5], out = {val: NaN, who: []};
     const take = (x, e) => { if (isNaN(out.val) || (lo ? x < out.val : x > out.val)){ out.val = x; out.who = [e]; } else if (x === out.val) out.who.push(e); };
     entries.forEach(e => {
       let x = e.v[d[0]];
       if (lo){
-        if (e.gp < MING[scope] || (e.min > 0 && e.min / e.gp < MINQ) || (soc && !(e.v.SAV > 0))) return;
+        if (e.gp < MING[scope] || (soc && !(e.v.SAV > 0))) return;
         if (scope !== "game") x = x / e.gp;
         x = Math.round(x * 10) / 10;
       } else if (!(x > 0)) return;
@@ -581,7 +581,7 @@ function vRecords(){
       body = `<div class="rhero"><div class="rk">${esc(scopeName)} · ${esc(recCat)} · ${esc(d[1])}</div><div class="rbig">${rate ? o.val.toFixed(1) : o.val} ${esc(d[1]).toUpperCase()}${rate ? " PER GAME" : ""}</div><div class="rsub">${d[5] ? "Lowest · " : ""}Team record${o.who.length > 1 ? " · " + o.who.length + " tied" : ""}</div></div>${who}${o.who.length > 8 ? `<div class="mute" style="margin:8px 4px">+${o.who.length - 8} more tied</div>` : ""}`;
     }
   }
-  const note = d && d[5] ? `<p class="note" style="margin:10px 4px 0">Lower is better for this stat, so the record is the lowest${recScope === "game" ? "" : " per game"}, counting only players who played real minutes${soc ? " and goalkeepers" : ""}.</p>` : "";
+  const note = d && d[5] ? `<p class="note" style="margin:10px 4px 0">Lower is better for this stat, so the record is the lowest${recScope === "game" ? "" : " per game"}${soc ? ", counting only goalkeepers" : ""}.</p>` : "";
   const hist = HIST.length || HISTBEST.length ? "" : `<p class="note" style="margin:10px 4px 0">${recScope === "season" || recScope === "career" ? "Includes this season only so far. Add past seasons to HIST in this file to extend it." : "Based on this season’s game log."}</p>`;
   return `<div class="rpanel"><h1 class="rt">${esc(TEAM)} ${esc(SEASON.split(" · ")[0] || "")}</h1><div class="rst">Stat records</div>${controls}<div class="rhint">Choose a scope, category, and stat to load its team record.</div>${body}${note}${hist}</div>`;
 }
